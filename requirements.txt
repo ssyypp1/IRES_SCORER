@@ -1,0 +1,8 @@
+# --- Scoring only ---
+# ViennaRNA (provides the `RNA` module for RNA secondary-structure prediction),
+# numpy, and pandas are the only dependencies needed to run the scorer.
+#   pip install -r requirements.txt
+# Tested with Python 3.8 / 3.9 / 3.10.
+ViennaRNA>=2.4.0
+numpy>=1.20
+pandas>=1.3

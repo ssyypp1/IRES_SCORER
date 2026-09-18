@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1.8cm]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\begin{document}
+
+\begin{algorithm}[H]
+\caption{Ribozyme-mediated circularization scoring of a candidate IRES}
+\label{alg:fsl}
+\begin{algorithmic}[1]
+\REQUIRE candidate IRES $s$; permuted group-I self-splicing ribozyme halves
+$R_{3'}$ (upstream) and $R_{5'}$ (downstream, carries the IGS); reporter ORF
+\ENSURE circularization score $r(s)$; catalytic splice site $j^\ast$
+\STATE $\mathcal{L} \gets \textsc{HairpinLoops}(s)$ \COMMENT{MFE-folded, accessible loop + stable stem}
+\STATE $r \gets 0,\ j^\ast \gets \varnothing$
+\FOR{each loop $\ell \in \mathcal{L}$, each candidate site $j \in \ell$}
+  \IF{$j$ fails the splice-site sequence rule}
+  \STATE \textbf{continue}
+  \ENDIF
+  \STATE $R_{5'}^{(j)} \gets \textsc{RewriteIGS}(R_{5'}; s, j)$ \COMMENT{pair IGS to the site upstream of $j$}
+  \STATE $S \gets R_{3'} + s[j:] + \mathrm{ORF} + s[:j] + R_{5'}^{(j)}$ \COMMENT{PIE construct}
+  \IF{ribozyme halves in $S$ fail to fold into an active conformation}
+  \STATE \textbf{continue}
+  \ENDIF
+  \STATE $P \gets \textsc{PairProb}(S)$ \COMMENT{ViennaRNA partition function}
+  \IF{IGS--target pairing at the splice junction is weak}
+  \STATE \textbf{continue}
+  \ENDIF
+  \STATE $\alpha \gets \textsc{StabilityScore}(P; R_{3'}, R_{5'})$
+  \IF{$\alpha > r$}
+  \STATE $r \gets \alpha,\ j^\ast \gets j$
+  \ENDIF
+\ENDFOR
+\RETURN $(r, j^\ast)$
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}
