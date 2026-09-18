@@ -1,4 +1,4 @@
-# IRES_MLDV
+# IRES_SCORER
 
 Given a candidate IRES (Internal Ribosome Entry Site) sequence, this tool
 searches for hairpin stem-loops that satisfy a set of structural criteria and,
